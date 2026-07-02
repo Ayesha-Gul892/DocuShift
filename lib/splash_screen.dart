@@ -26,22 +26,71 @@ class _Splash_screenState extends State<Splash_screen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+  Widget build(BuildContext context) {   return Scaffold(
+    body: Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+           Colors.blue.shade200,
+            Colors.blue.shade100,
 
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/image/files.jpg"),
-        )
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+
+          // Logo
+          Container(
+            height: 120,
+            width: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: const Icon(
+              Icons.picture_as_pdf,
+              color: Colors.blue,
+              size: 70,
+            ),
           ),
 
+          const SizedBox(height: 30),
+
+          const Text(
+            "DOCUFLOW",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+            ),
           ),
 
-    );
+          const SizedBox(height: 10),
+
+          const Text(
+            "Convert CSV Files to PDF",
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+          ),
+
+          const SizedBox(height: 50),
+
+          const CircularProgressIndicator(
+            color: Colors.white,
+          ),
+
+        ],
+      ),
+    ),
+  );
   }
-
 }
