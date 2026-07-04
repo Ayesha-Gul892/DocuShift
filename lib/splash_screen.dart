@@ -17,7 +17,7 @@ class _Splash_screenState extends State<Splash_screen> {
     super.initState();
 
     // delay then go to home screen
-    Timer(const Duration(seconds:5), () {
+    Timer(const Duration(seconds:50), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Home_Screen()),
@@ -32,8 +32,8 @@ class _Splash_screenState extends State<Splash_screen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-           Colors.blue.shade200,
-            Colors.blue.shade100,
+           Colors.white,
+            Colors.blue.shade400,
 
           ],
           begin: Alignment.topLeft,
@@ -45,7 +45,7 @@ class _Splash_screenState extends State<Splash_screen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
-          // Logo
+          // LOGO
           Container(
             height: 120,
             width: 120,
@@ -65,7 +65,7 @@ class _Splash_screenState extends State<Splash_screen> {
           const Text(
             "DOCUFLOW",
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.blue,
               fontSize: 34,
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
@@ -77,7 +77,7 @@ class _Splash_screenState extends State<Splash_screen> {
           const Text(
             "Convert CSV Files to PDF",
             style: TextStyle(
-              color: Colors.white70,
+              color: Colors.white,
               fontSize: 16,
             ),
           ),
@@ -85,11 +85,20 @@ class _Splash_screenState extends State<Splash_screen> {
           const SizedBox(height: 50),
 
           const CircularProgressIndicator(
-            color: Colors.white,
+            color: Colors.blue,
+
+          ),
+          const Text(
+            "loading",
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 16,
+            ),
           ),
 
         ],
       ),
+
     ),
   );
   }
