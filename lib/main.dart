@@ -1,5 +1,5 @@
-import 'package:file_manager/home_screen.dart';
-import 'package:file_manager/splash_screen.dart';
+
+import 'package:docushift/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '',
+      title: 'DocuShift',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.grey),

@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:file_manager/home_screen.dart';
+import 'package:docushift/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class Splash_screen extends StatefulWidget {
