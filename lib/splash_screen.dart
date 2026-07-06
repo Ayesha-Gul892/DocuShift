@@ -17,7 +17,7 @@ class _Splash_screenState extends State<Splash_screen> {
     super.initState();
 
     // delay then go to home screen
-    Timer(const Duration(seconds:50), () {
+    Timer(const Duration(seconds:3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Home_Screen()),
