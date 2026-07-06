@@ -60,7 +60,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                   children: [
 
                     Text(
-                      "DOCUFLOW",
+                      "DOCUSHIFT",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 34,
