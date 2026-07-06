@@ -63,7 +63,7 @@ class _Splash_screenState extends State<Splash_screen> {
           const SizedBox(height: 30),
 
           const Text(
-            "DOCUFLOW",
+            "DOCUSHIFT",
             style: TextStyle(
               color: Colors.blue,
               fontSize: 34,
