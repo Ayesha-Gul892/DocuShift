@@ -12,94 +12,244 @@ class _Home_ScreenState extends State<Home_Screen> {
 
   final TextEditingController fileController = TextEditingController();
 
-  // File Picker Function
+  bool fileSelected = false;
+
   void chooseFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    FilePickerResult? result =
+    await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      String fileName = result.files.single.name; // file ka name
+
       setState(() {
-        fileController.text = fileName;
+        fileController.text = result.files.single.name;
+        fileSelected = true;
       });
+
     } else {
-      // User cancelled
+
       setState(() {
-        fileController.text = "No file selected";
+        fileController.text = "";
+        fileSelected = false;
       });
+
     }
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Colors.white,
+
+      backgroundColor: Colors.grey.shade100,
+
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 2,
         centerTitle: true,
-        toolbarHeight: 90,
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              "DOCUFLOW",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              "Manage • Edit • Convert",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-            ),
-          ],
+
+        title: const Text(
+          "DOCUFLOW",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold),
         ),
+
+        actions: const [
+
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: Icon(Icons.upload_file,color: Colors.black),
+          )
+
+        ],
       ),
 
+      body: SingleChildScrollView(
 
+        padding: const EdgeInsets.all(20),
 
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
         child: Column(
+
           children: [
 
-            const SizedBox(height: 40),
-
-            // Text Field
-            TextField(
-              controller: fileController,
-              decoration: InputDecoration(
-                hintText: "No file selected",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
             const SizedBox(height: 20),
 
-            // Button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: chooseFile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "Choose File",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+            Card(
+
+              elevation: 4,
+
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: Padding(
+
+                padding: const EdgeInsets.all(20),
+
+                child: Column(
+
+                  children: const [
+
+                    Icon(
+                      Icons.picture_as_pdf,
+                      size: 80,
+                      color: Colors.red,
+                    ),
+
+                    SizedBox(height: 15),
+
+                    Text(
+                      "Convert Any File to PDF",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    Text(
+                      "Choose a file and convert it into PDF instantly.",
+                      textAlign: TextAlign.center,
+                    )
+
+                  ],
                 ),
               ),
             ),
+
+            const SizedBox(height: 30),
+
+            TextField(
+
+              controller: fileController,
+              readOnly: true,
+
+              decoration: InputDecoration(
+
+                hintText: "No file selected",
+
+                prefixIcon: const Icon(Icons.insert_drive_file),
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+
+              width: double.infinity,
+              height: 55,
+
+              child: ElevatedButton(
+
+                onPressed: chooseFile,
+
+                style: ElevatedButton.styleFrom(
+
+                  backgroundColor: Colors.black,
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+
+                ),
+
+                child: const Text(
+                  "Choose File",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17),
+                ),
+
+              ),
+
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+
+              width: double.infinity,
+              height: 55,
+
+              child: ElevatedButton.icon(
+
+                icon: const Icon(Icons.picture_as_pdf),
+
+                label: const Text(
+                  "Convert to PDF",
+                  style: TextStyle(fontSize: 17),
+                ),
+
+                onPressed: fileSelected
+                    ? () {
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+
+                    const SnackBar(
+                      content: Text("PDF Conversion Coming Soon"),
+                    ),
+
+                  );
+
+                }
+                    : null,
+
+              ),
+
+            ),
+
+            const SizedBox(height: 25),
+
+            if(fileSelected)
+
+              Container(
+
+                width: double.infinity,
+
+                padding: const EdgeInsets.all(15),
+
+                decoration: BoxDecoration(
+
+                  color: Colors.green.shade100,
+
+                  borderRadius: BorderRadius.circular(15),
+
+                ),
+
+                child: Row(
+
+                  children: const [
+
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
+
+                    SizedBox(width: 10),
+
+                    Expanded(
+
+                      child: Text(
+                        "File selected successfully!",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                    )
+
+                  ],
+                ),
+              )
+
           ],
         ),
       ),
