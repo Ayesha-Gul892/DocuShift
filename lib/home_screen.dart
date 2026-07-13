@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'services/file_converter.dart';
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({super.key});
@@ -10,12 +11,16 @@ class Home_Screen extends StatefulWidget {
 
 class _Home_ScreenState extends State<Home_Screen> {
   final TextEditingController fileController = TextEditingController();
+  String? selectedFilePath; // file ka path store karega
 
   void chooseFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+    );
 
-    if (result != null) {
+    if (result != null && result.files.single.path != null) {
       setState(() {
+        selectedFilePath = result.files.single.path;
         fileController.text = result.files.single.name;
       });
     } else {
@@ -34,19 +39,18 @@ class _Home_ScreenState extends State<Home_Screen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               //HEADER
-
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.only(
-                    top: 30, left: 20, right: 20, bottom: 40),
+                  top: 30,
+                  left: 20,
+                  right: 20,
+                  bottom: 40,
+                ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.blue.shade100,
-                      Colors.blue.shade400,
-                    ],
+                    colors: [Colors.blue.shade100, Colors.blue.shade400],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -58,7 +62,6 @@ class _Home_ScreenState extends State<Home_Screen> {
 
                 child: const Column(
                   children: [
-
                     Text(
                       "DOCUSHIFT",
                       style: TextStyle(
@@ -72,10 +75,7 @@ class _Home_ScreenState extends State<Home_Screen> {
 
                     Text(
                       "Convert CSV Files to PDF",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 18),
                     ),
                   ],
                 ),
@@ -84,7 +84,6 @@ class _Home_ScreenState extends State<Home_Screen> {
               const SizedBox(height: 25),
 
               // CARD
-
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.all(20),
@@ -102,15 +101,10 @@ class _Home_ScreenState extends State<Home_Screen> {
 
                 child: Column(
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-
-                        Image.asset(
-                          "assets/image/csv-file.jpg",
-                          height: 80,
-                        ),
+                        Image.asset("assets/image/csv-file.jpg", height: 80),
 
                         const Icon(
                           Icons.arrow_forward,
@@ -141,9 +135,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                     const Text(
                       "Easily convert your CSV files into PDF documents",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
@@ -152,7 +144,6 @@ class _Home_ScreenState extends State<Home_Screen> {
               const SizedBox(height: 25),
 
               // FILE FIELD
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
 
@@ -177,7 +168,6 @@ class _Home_ScreenState extends State<Home_Screen> {
               const SizedBox(height: 20),
 
               //CHOOSE BUTTON
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
 
@@ -188,17 +178,11 @@ class _Home_ScreenState extends State<Home_Screen> {
                   child: ElevatedButton.icon(
                     onPressed: chooseFile,
 
-                    icon: const Icon(
-                      Icons.folder_open,
-                      color: Colors.white,
-                    ),
+                    icon: const Icon(Icons.folder_open, color: Colors.white),
 
                     label: const Text(
                       "Choose CSV File",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
 
                     style: ElevatedButton.styleFrom(
@@ -214,7 +198,6 @@ class _Home_ScreenState extends State<Home_Screen> {
               const SizedBox(height: 15),
 
               // CONVERT BUTTON
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
 
@@ -223,21 +206,43 @@ class _Home_ScreenState extends State<Home_Screen> {
                   height: 55,
 
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      // Convert CSV to PDF
+                    onPressed: () async {
+                      if (selectedFilePath == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a file first"),
+                          ),
+                        );
+                        return;
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Converting... please wait"),
+                        ),
+                      );
+
+                      try {
+                        final converter = FileConverter();
+                        final pdfPath = await converter.convertFile(
+                          selectedFilePath!,
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("PDF created at: $pdfPath")),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Error: ${e.toString()}")),
+                        );
+                      }
                     },
 
-                    icon: const Icon(
-                      Icons.picture_as_pdf,
-                      color: Colors.white,
-                    ),
+                    icon: const Icon(Icons.picture_as_pdf, color: Colors.white),
 
                     label: const Text(
                       "Convert to PDF",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
 
                     style: ElevatedButton.styleFrom(
@@ -250,7 +255,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                 ),
               ),
 
-
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -265,32 +270,19 @@ class _Home_ScreenState extends State<Home_Screen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-            ),
-          ],
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
         ),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
-            Icon(
-              icon,
-              color: Colors.blue,
-              size: 40,
-            ),
+            Icon(icon, color: Colors.blue, size: 40),
 
             const SizedBox(height: 10),
 
             Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ],
         ),
