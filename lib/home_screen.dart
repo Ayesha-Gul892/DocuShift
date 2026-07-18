@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'services/file_converter.dart';
+import 'package:open_file/open_file.dart';
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({super.key});
@@ -196,7 +197,6 @@ class _Home_ScreenState extends State<Home_Screen> {
               ),
 
               const SizedBox(height: 15),
-
               // CONVERT BUTTON
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -223,15 +223,18 @@ class _Home_ScreenState extends State<Home_Screen> {
                       );
 
                       try {
-                        final converter = FileConverter();
-                        final pdfPath = await converter.convertFile(
-                          selectedFilePath!,
-                        );
+                           final converter = FileConverter();
+                       final pdfPath = await converter.convertFile(
+                        selectedFilePath!,
+                  );
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("PDF created at: $pdfPath")),
-                        );
-                      } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("PDF created! Opening...")),
+                          );
+
+                       // PDF ko auto-open karo
+                       await OpenFile.open(pdfPath);
+               } catch (e) { 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Error: ${e.toString()}")),
                         );

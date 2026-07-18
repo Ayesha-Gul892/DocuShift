@@ -3,6 +3,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
+import 'package:open_file/open_file.dart';
 
 class FileConverter {
   // Text file ko PDF me convert karta hai
@@ -42,7 +43,7 @@ class FileConverter {
     final content = await file.readAsString();
 
     // 2. CSV text ko rows/columns (List of Lists) me convert karo
-    List<List<dynamic>> rows = const CsvToListConverter().convert(content);
+    List<List<dynamic>> rows = CsvToListConverter().convert(content);
 
     // 3. Naya PDF document banao
     final pdf = pw.Document();
