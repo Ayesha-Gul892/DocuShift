@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:file_manager/pdf_editor_screen.dart';
 
 class Home_Screen extends StatefulWidget {
   const Home_Screen({super.key});
@@ -14,16 +17,29 @@ class _Home_ScreenState extends State<Home_Screen> {
 
   bool fileSelected = false;
 
+  // Keep the actual path of the picked file so we can read its content
+  // and later convert it into a PDF.
+  String? selectedFilePath;
+  String selectedFileName = "";
+
+  // On Flutter Web there is no real file path, only raw bytes — so we
+  // always ask file_picker for bytes too (withData: true) and pass them
+  // along to the editor screen.
+  Uint8List? selectedFileBytes;
+
   void chooseFile() async {
 
     FilePickerResult? result =
-    await FilePicker.platform.pickFiles();
+    await FilePicker.platform.pickFiles(withData: true);
 
     if (result != null) {
 
       setState(() {
         fileController.text = result.files.single.name;
         fileSelected = true;
+        selectedFilePath = result.files.single.path;
+        selectedFileName = result.files.single.name;
+        selectedFileBytes = result.files.single.bytes;
       });
 
     } else {
@@ -31,10 +47,28 @@ class _Home_ScreenState extends State<Home_Screen> {
       setState(() {
         fileController.text = "";
         fileSelected = false;
+        selectedFilePath = null;
+        selectedFileName = "";
+        selectedFileBytes = null;
       });
 
     }
 
+  }
+
+  // Opens the PDF editor screen where the user can edit the content and
+  // then convert + share the resulting PDF.
+  void goToPdfEditor() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Pdf_Editor_Screen(
+          filePath: selectedFilePath,
+          fileBytes: selectedFileBytes,
+          fileName: selectedFileName,
+        ),
+      ),
+    );
   }
 
   @override
@@ -188,19 +222,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                   style: TextStyle(fontSize: 17),
                 ),
 
-                onPressed: fileSelected
-                    ? () {
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-
-                    const SnackBar(
-                      content: Text("PDF Conversion Coming Soon"),
-                    ),
-
-                  );
-
-                }
-                    : null,
+                onPressed: fileSelected ? goToPdfEditor : null,
 
               ),
 
