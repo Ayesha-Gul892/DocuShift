@@ -30,6 +30,7 @@ class _Splash_screenState extends State<Splash_screen> {
     body: Container(
       width: double.infinity,
       decoration: BoxDecoration(
+        //gradient
         gradient: LinearGradient(
           colors: [
            Colors.white,
