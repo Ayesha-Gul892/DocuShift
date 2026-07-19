@@ -269,9 +269,9 @@ class _Home_ScreenState extends State<Home_Screen> {
                       ),
 
 
-                      const Icon(
+                      Icon(
                         Icons.arrow_forward,
-                        color: Colors.blue,
+                        color: Colors.blue[500],
                         size: 40,
                       ),
 
